@@ -7,6 +7,8 @@ namespace IntervalTimer
 
     public class IntervalTimer
     {
+        public event IntervalEventHandler IntervalCompleted;
+
         public TimeSpan ShortDuration { get; set; }
         public TimeSpan LongDuration { get; set; }
 
