@@ -3,7 +3,7 @@ using Microsoft.SPOT;
 
 namespace IntervalTimer
 {
-    public delegate void IntervalEventHandler(object sender, EventArgs e);
+    public delegate void IntervalEventHandler(object sender, IntervalReachedEventArgs e);
 
     public class IntervalTimer
     {
