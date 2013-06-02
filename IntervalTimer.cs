@@ -42,6 +42,7 @@ namespace IntervalTimer
 
         private void InternalTimerTriggered(object state)
         {
+            _timer.Dispose();
             bool isLastDurationShort = (bool)state;
 
             TimeSpan nextDuration;
@@ -61,7 +62,6 @@ namespace IntervalTimer
                 previousDurationType = IntervalType.Long;
             }
 
-            _timer.Dispose();
             _timer = new ExtendedTimer(InternalTimerTriggered, !isLastDurationShort, TimeSpan.Zero, nextDuration);
             
             IntervalReachedEventArgs arguments = new IntervalReachedEventArgs(previousDurationType, eventMessage);
