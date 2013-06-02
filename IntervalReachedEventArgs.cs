@@ -8,7 +8,7 @@ namespace IntervalTimer
         Short,
         Long
     };
-    
+
     public class IntervalReachedEventArgs : EventArgs
     {
         public IntervalType Type { get; set; }
