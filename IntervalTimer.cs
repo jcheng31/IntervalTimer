@@ -3,6 +3,8 @@ using Microsoft.SPOT;
 
 namespace IntervalTimer
 {
+    public delegate void IntervalEventHandler(object sender, EventArgs e);
+
     public class IntervalTimer
     {
         public TimeSpan ShortDuration { get; set; }
@@ -19,5 +21,7 @@ namespace IntervalTimer
             ShortDuration = new TimeSpan(0, 0, shortSeconds);
             LongDuration = new TimeSpan(0, 0, longSeconds);
         }
+
+        
     }
 }
