@@ -40,6 +40,14 @@ namespace IntervalTimer
             _timer = new ExtendedTimer(InternalTimerTriggered, true, TimeSpan.Zero, ShortDuration);
         }
 
+        public void Stop()
+        {
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
+        }
+
         private void InternalTimerTriggered(object state)
         {
             _timer.Dispose();
