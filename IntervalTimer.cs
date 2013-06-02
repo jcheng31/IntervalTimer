@@ -16,12 +16,21 @@ namespace IntervalTimer
 
         public IntervalTimer(TimeSpan shortDuration, TimeSpan longDuration)
         {
+            if (shortDuration.CompareTo(longDuration) > 0)
+            {
+                throw new Exception("Short duration must be less than the long duration.");
+            }
+
             ShortDuration = shortDuration;
             LongDuration = longDuration;
         }
 
         public IntervalTimer(int shortSeconds, int longSeconds)
         {
+            if (shortSeconds > longSeconds)
+            {
+                throw new Exception("Short duration must be less than the long duration.");
+            }
             ShortDuration = new TimeSpan(0, 0, shortSeconds);
             LongDuration = new TimeSpan(0, 0, longSeconds);
         }
