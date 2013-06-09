@@ -45,14 +45,16 @@ namespace IntervalTimer
             _durations.Add(interval);
         }
 
-        public IntervalTimer(int shortSeconds, int longSeconds)
+        public void RemoveIntervalAt(int index)
         {
-            if (shortSeconds > longSeconds)
-            {
-                throw new Exception("Short duration must be less than the long duration.");
-            }
-            ShortDuration = new TimeSpan(0, 0, shortSeconds);
-            LongDuration = new TimeSpan(0, 0, longSeconds);
+            _durations.RemoveAt(index);
+        }
+
+        public TimeSpan[] PeekAllDurations()
+        {
+            TimeSpan[] returnArray = new TimeSpan[_durations.Count];
+            _durations.CopyTo(returnArray);
+            return returnArray;
         }
 
         public void Start()
