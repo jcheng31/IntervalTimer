@@ -59,7 +59,11 @@ namespace IntervalTimer
 
         public void Start()
         {
-            _timer = new ExtendedTimer(InternalTimerTriggered, true, TimeSpan.Zero, ShortDuration);
+            if (_durations.Count > 0)
+            {
+                TimeSpan currentDuration = (TimeSpan)_durations[_position];
+                _timer = new ExtendedTimer(InternalTimerTriggered, _position, TimeSpan.Zero, currentDuration);
+            }
         }
 
         public void Stop()
@@ -70,32 +74,31 @@ namespace IntervalTimer
             }
         }
 
+        public void Reset()
+        {
+            Stop();
+            _position = 0;
+        }
+
         private void InternalTimerTriggered(object state)
         {
             _timer.Dispose();
-            bool isLastDurationShort = (bool)state;
 
-            TimeSpan nextDuration;
-            String eventMessage;
-            IntervalType previousDurationType;
+            // Fire off an event.
+            IntervalReachedEventArgs args = new IntervalReachedEventArgs(_position);
+            OnIntervalCompleted(args);
 
-            if (isLastDurationShort)
+            _position = (_position + 1) % _durations.Count;
+
+            bool shouldTerminate = _position == 0 && !Repeat;
+            if (shouldTerminate)
             {
-                nextDuration = LongDuration;
-                eventMessage = "Short Duration Triggered";
-                previousDurationType = IntervalType.Short;
-            }
-            else
-            {
-                nextDuration = ShortDuration;
-                eventMessage = "Long Duration Triggered";
-                previousDurationType = IntervalType.Long;
+                return;
             }
 
-            _timer = new ExtendedTimer(InternalTimerTriggered, !isLastDurationShort, TimeSpan.Zero, nextDuration);
-            
-            IntervalReachedEventArgs arguments = new IntervalReachedEventArgs(previousDurationType, eventMessage);
-            OnIntervalCompleted(arguments);
+            // Set the next timer going.
+            TimeSpan nextDuration = (TimeSpan)_durations[_position];
+            _timer = new ExtendedTimer(InternalTimerTriggered, _position, TimeSpan.Zero, nextDuration);
         }
 
         private void OnIntervalCompleted(IntervalReachedEventArgs arguments)
