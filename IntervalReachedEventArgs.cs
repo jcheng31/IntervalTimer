@@ -5,11 +5,11 @@ namespace IntervalTimer
 {
     public class IntervalReachedEventArgs : EventArgs
     {
-        public String Message { get; set; }
+        public int DurationNumber { get; set; }
 
-        public IntervalReachedEventArgs(String message)
+        public IntervalReachedEventArgs(int durationNumber)
         {
-            Message = message;
+            DurationNumber = durationNumber;
         }
     }
 }
