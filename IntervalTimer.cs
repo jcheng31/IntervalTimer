@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Microsoft.SPOT;
 
 namespace IntervalTimer
@@ -9,20 +10,39 @@ namespace IntervalTimer
     {
         public event IntervalEventHandler IntervalCompleted;
 
-        public TimeSpan ShortDuration { get; set; }
-        public TimeSpan LongDuration { get; set; }
+        public bool Repeat;
 
+        private int _position = 0;
+        private ArrayList _durations;
         private ExtendedTimer _timer;
 
-        public IntervalTimer(TimeSpan shortDuration, TimeSpan longDuration)
+        public IntervalTimer(bool shouldRepeat)
         {
-            if (shortDuration.CompareTo(longDuration) > 0)
-            {
-                throw new Exception("Short duration must be less than the long duration.");
-            }
+            _durations = new ArrayList();
+            Repeat = shouldRepeat;
+        }
 
-            ShortDuration = shortDuration;
-            LongDuration = longDuration;
+        public IntervalTimer(bool shouldRepeat, IEnumerable intervals)
+        {
+            Repeat = shouldRepeat;
+            _durations = new ArrayList();
+            foreach (var interval in intervals)
+            {
+                try
+                {
+                    TimeSpan currentInterval = (TimeSpan) interval;
+                    _durations.Add(currentInterval);
+                }
+                catch (InvalidCastException)
+                {
+                    throw new Exception("Intervals should only contain TimeSpan objects.");
+                }
+            }
+        }
+
+        public void AddInterval(TimeSpan interval)
+        {
+            _durations.Add(interval);
         }
 
         public IntervalTimer(int shortSeconds, int longSeconds)
